@@ -6,8 +6,5 @@ Cartesi code backend for the GaloisBlocks dApp build on the Cartesi Hackathon 20
 
 TO DO - Actualmente: 
 Task [#1](https://github.com/GaloisBlocks/GaloisBlocksCartesi/issues/1) :
-- Se genera contrato con direccion y argumentos especificos, falta crear una interaccion "mint" y ejecutar particularmente; se podrá exportar en otra tarea 
-
-- No añade fotos aún, a discutir con @Efrainq07 si se implementa de una o se deja como tarea para después (@nostalgic-math-student cree que es mejor dejarlo solo a mint)
-
+- Falta generar Metadata y asignar contables, para que al mintear se genere un nuevo control
 
