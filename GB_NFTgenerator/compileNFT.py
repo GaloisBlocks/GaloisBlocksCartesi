@@ -21,10 +21,12 @@ contract_interface = compiled_sol['<stdin>:GB_NFT']
 
 #Importante: identifica la wallet que va a ser creadora del contrato
 deploy_address = web3.eth.accounts[0]
+#Importante: parámetro del usuario para su NFT, maximo numero de NFTs
+maxSupply = 51
 
 # Despliegue de contrato
 contract = web3.eth.contract(abi=contract_interface['abi'], bytecode=contract_interface['bin'])
-tx_hash = contract.constructor('MyNFT', 'MNFT',51).transact({'from': deploy_address})
+tx_hash = contract.constructor('MyNFT', 'MNFT',maxSupply).transact({'from': deploy_address})
 tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
 contract_address = tx_receipt.contractAddress
 
