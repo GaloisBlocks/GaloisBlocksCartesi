@@ -24,7 +24,7 @@ deploy_address = web3.eth.accounts[0]
 
 # Despliegue de contrato
 contract = web3.eth.contract(abi=contract_interface['abi'], bytecode=contract_interface['bin'])
-tx_hash = contract.constructor('MyNFT', 'MNFT').transact({'from': deploy_address})
+tx_hash = contract.constructor('MyNFT', 'MNFT',51).transact({'from': deploy_address})
 tx_receipt = web3.eth.wait_for_transaction_receipt(tx_hash)
 contract_address = tx_receipt.contractAddress
 
@@ -41,7 +41,9 @@ print(f"Symbol: {symbol}")
 # Define the data to be stored in the JSON file
 data = {
     "abi": contract_interface["abi"],
-    "contract_address": contract_address
+    "contract_address": contract_address,
+    "contract_name": name,
+    "contract_sym": symbol
 }
 
 # Local Workaround: Se guarda localmente el último ABI y contrato generado
