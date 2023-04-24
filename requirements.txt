@@ -2,4 +2,5 @@ web3 == 6.2.0
 py-solc == 3.2.0
 jinja2 == 3.1.2
 py-solc-x == 1.1.1
- 
+ipfshttpclient == 0.7.0
+cytoolz
