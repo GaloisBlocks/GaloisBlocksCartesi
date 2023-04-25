@@ -1,0 +1,5 @@
+{
+  "fs": {
+    "files": ["GaloisBlocks.py", "entrypoint.sh"]
+  }
+}
