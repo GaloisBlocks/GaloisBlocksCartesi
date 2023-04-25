@@ -89,8 +89,8 @@ def handle_advance(data):
         print(input)
         parsedInput = input.split(" ")
         print(parsedInput)
-        # Example 1: "NFT MyNFT MNFT 0x9fFC0375FF244F83877bb2fe47b1bbbE4ab37c25 100"
         # Create a collection called MyNFT for given address with 100 maxSupply tokens
+        # Example 1: "NFT MyNFT MNFT 0x9fFC0375FF244F83877bb2fe47b1bbbE4ab37c25 100"
         if parsedInput[0] == "NFT":
             contract_gen = compileNFT.main(*parsedInput[1:])
             output = str2hex(contract_gen)
