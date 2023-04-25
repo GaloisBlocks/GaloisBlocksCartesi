@@ -2,22 +2,18 @@ from web3 import Web3
 import json
 import random
 
-web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
+web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9545'))
 
-with open('contractInfo.json', 'r') as f:
-    contract_info = json.load(f)
-
-ABI = contract_info['abi']
-contract_address = contract_info['contract_address']
-
-# Cuenta para deploy
-deploy_address = web3.eth.accounts[0]
-
-#Esta variable es la que interactua con el servicio frontend
-interaction_address = deploy_address
-contract_instance = web3.eth.contract(address=contract_address,abi=ABI)
-
-# Ejemplo: Mintear un NFT del contrato con un ID dado a
+# with open('contractInfo.json', 'r') as f:
+#     contract_info = json.load(f)
+def interact(contract_information, address):
+    contract_info = json.load(contract_information)
+    ABI = contract_info['abi']
+    contract_address = contract_info['contract_address']
+    interaction_address = address
+    contract_instance = web3.eth.contract(address=contract_address,abi=ABI)
+    
+    return contract_instance# Ejemplo: Mintear un NFT del contrato con un ID dado a
 
 def mintTokens(toAddress, fromAddress, amount, contract_instance):
     # Mint amount token
@@ -39,9 +35,9 @@ def burnTokens(fromAddress, amount, contract_instance):
 
     return f"{amount} ERC20 tokens quemados :fuego:"
 
-amount = 10
-x = mintTokens(interaction_address,interaction_address,amount,contract_instance)
-print(x)
-y = burnTokens(interaction_address,amount,contract_instance)
-print("  ")
-print(y)
+# amount = 10
+# x = mintTokens(interaction_address,interaction_address,amount,contract_instance)
+# print(x)
+# y = burnTokens(interaction_address,amount,contract_instance)
+# print("  ")
+# print(y)

@@ -1,5 +1,6 @@
 # syntax=docker.io/docker/dockerfile:1.4
-FROM cartesi/toolchain:0.13.0
+FROM --platform=linux/riscv64 cartesi/python:3.10-slim-jammy
 
 WORKDIR /opt/cartesi/dapp
 COPY . .
+

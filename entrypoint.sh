@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 # Copyright 2022 Cartesi Pte. Ltd.
 #
 # SPDX-License-Identifier: Apache-2.0
@@ -13,18 +13,4 @@
 
 set -e
 
-MACHINE_DIR=$1
-ROLLUP_HTTP_SERVER_PORT=5004
-
-cartesi-machine \
-    --assert-rolling-template \
-    --ram-length=128Mi \
-    --rollup \
-    --flash-drive=label:dapp,filename:dapp.ext2 \
-    --flash-drive=label:root,filename:rootfs.ext2 \
-    --ram-image=linux.bin \
-    --rom-image=rom.bin \
-    --store=$MACHINE_DIR \
-    -- "cd /mnt/dapp; \
-        ROLLUP_HTTP_SERVER_URL=\"http://127.0.0.1:$ROLLUP_HTTP_SERVER_PORT\" \
-        ./entrypoint.sh"
+rollup-init python3 cartesiRollup.py

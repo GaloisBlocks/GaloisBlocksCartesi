@@ -14,6 +14,12 @@ from os import environ
 import traceback
 import logging
 import requests
+import random 
+import json
+from GB_NFTgenerator import compileNFT, interactNFT
+from GB_ERC20generator import compileERC20, interactERC20
+from GB_DAOgenerator import compileDAO, interactDAO
+
 
 logging.basicConfig(level="INFO")
 logger = logging.getLogger(__name__)
@@ -64,6 +70,10 @@ def handle_advance(data):
     return status
     """
 
+    response = requests.post(rollup_server + "/notice", json={"payload": data["payload"]})
+    logger.info(f"Received notice status {response.status_code} body {response.content}")
+
+
     """
     The sample code from the Echo DApp simply generates a notice with the payload of the
     request and print some log messages.
@@ -73,10 +83,38 @@ def handle_advance(data):
 
     status = "accept"
     try:
-        logger.info("Adding notice")
-        response = requests.post(rollup_server + "/notice", json={"payload": data["payload"]})
-        logger.info(f"Received notice status {response.status_code} body {response.content}")
+        input = hex2str(data["payload"])
 
+        # BUILD OUTPUT
+        print(input)
+        parsedInput = input.split(" ")
+        print(parsedInput)
+        # Example 1: "NFT MyNFT MNFT 0x9fFC0375FF244F83877bb2fe47b1bbbE4ab37c25 100"
+        # Create a collection called MyNFT for given address with 100 maxSupply tokens
+        if parsedInput[0] == "NFT":
+            contract_gen = compileNFT.main(*parsedInput[1:])
+            output = str2hex(contract_gen)
+
+        # Example 2: "DAO GB_DAOToken GBTkn 0x9fFC0375FF244F83877bb2fe47b1bbbE4ab37c25 3600"
+        # Create DAO contract with GB_DAOToken as governance token, given address as governor and vote_period for 3600 seconds
+        elif parsedInput[0] == "DAO":
+            contract_gen = compileDAO.main(*parsedInput[1:])
+            output = str2hex(contract_gen)
+
+        # Example 3: "ERC20 GB_Token GBT 0x9fFC0375FF244F83877bb2fe47b1bbbE4ab37c25 1000"
+        # Create ERC20 contract called "GB_Token" with given address and mint 1000 units to same address
+        elif parsedInput[0] == "ERC20":
+            contract_gen = compileERC20.main(*parsedInput[1:-1])
+            gen_interaction = interactERC20.interact(contract_gen,parsedInput[3])
+            mint_interaction = interactERC20.mintTokens(parsedInput[3],parsedInput[3],parsedInput[-1],gen_interaction)
+            output = str2hex(contract_gen + " " + mint_interaction)
+        else:
+            output = str2hex("Wrong String given")
+
+        logger.info("Adding notice with payload: '{input}'" )
+        response = requests.post(rollup_server + "/notice", json={ "payload":str2hex(output)})
+        logger.info(f"Received notice status {response.status_code} body {response.content}")
+  
     except Exception as e:
         status = "reject"
         msg = f"Error processing data {data}\n{traceback.format_exc()}"

@@ -6,20 +6,19 @@ import random
 import time
 import datetime
 
-web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:8545'))
+web3 = Web3(Web3.HTTPProvider('http://127.0.0.1:9545'))
 
-with open('contractInfo.json', 'r') as f:
-    contract_info = json.load(f)
+# with open('contractInfo.json', 'r') as f:
+#     contract_info = json.load(f)
 
-ABI = contract_info['abi']
-contract_address = contract_info['contract_address']
-
-# Cuenta para deploy
-deploy_address = web3.eth.accounts[0]
-
-#Esta variable es la que interactua con el servicio frontend
-interaction_address = deploy_address
-contract_instance = web3.eth.contract(address=contract_address,abi=ABI)
+def interact(contract_information, address):
+    contract_info = json.load(contract_information)
+    ABI = contract_info['abi']
+    contract_address = contract_info['contract_address']
+    interaction_address = address
+    contract_instance = web3.eth.contract(address=contract_address,abi=ABI)
+    
+    return contract_instance
 
 def create_proposal(contract_instance, proposer, proposal_description, proposal_title):
 
@@ -57,8 +56,8 @@ razon = "vamos a votar por n-bugattis a cada miembro"
 x = create_proposal(contract_instance, interaction_address,razon, titulo)
 print(x) 
  """
-active = get_active_proposals(contract_instance)
-print(active)
+# active = get_active_proposals(contract_instance)
+# print(active)
 """ 
 razon = "yo también quiero un bugatti"
 vote = vote_proposal(contract_instance,interaction_address,2,razon)

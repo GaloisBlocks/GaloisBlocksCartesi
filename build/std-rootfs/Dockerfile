@@ -17,9 +17,7 @@ RUN apt update \
     libreadline-dev \
     liblzma-dev \
     libffi-dev \
-    libssl-dev \
-    wget 
-
+    libssl-dev
 
 ENV PYTHON_VERSION=3.10
 ENV PYTHON_VERSION_FULL=3.10.1
@@ -63,7 +61,7 @@ RUN make install
 
 WORKDIR /tmp
 RUN pip3 install crossenv
-RUN rm -rf Python-$PYTHON_VERSION_FULL*
+# RUN rm -rf Python-$PYTHON_VERSION_FULL*
 
 # download standard machine drives
 FROM busybox as machine-core
@@ -73,12 +71,7 @@ WORKDIR /opt/cartesi/share
 # download dependencies
 COPY dependencies .
 COPY shasumfile .
-# RUN while read DEP; do &&  wget -O $DEP --no-check-certificate ; done < dependencies 
-RUN while read DEP; do wget -O rom.bin https://github.com/cartesi/machine-emulator-rom/releases/download/v0.15.0/rom-v0.15.0.bin && wget -O linux.bin https://github.com/cartesi/image-kernel/releases/download/v0.15.0/linux-5.15.63-ctsi-1.bin && wget -O rootfs.ext2 https://github.com/cartesi/image-rootfs/releases/download/v0.16.0/rootfs-v0.16.0.ext2; done < dependencies 
-
-# RUN do wget -O rom.bin https://github.com/cartesi/machine-emulator-rom/releases/download/v0.15.0/rom-v0.15.0.bin
-# RUN do wget -O linux.bin https://github.com/cartesi/image-kernel/releases/download/v0.15.0/linux-5.15.63-ctsi-1.bin
-# RUN do wget -O rootfs.ext2 https://github.com/cartesi/image-rootfs/releases/download/v0.16.0/rootfs-v0.16.0.ext2
+RUN while read DEP; do wget -O $DEP; done < dependencies
 RUN sha1sum -c shasumfile
 
 
@@ -113,6 +106,9 @@ COPY --from=machine-core /opt/cartesi/share/* .
 
 # build machine
 COPY build-machine.sh /usr/local/bin
+
+
+FROM --platform=linux/riscv64 cartesi/python:3.10-slim-jammy
 RUN build-machine.sh /opt/cartesi/share/dapp-bin
 
 # switch back to server-manager workdir

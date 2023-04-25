@@ -1,0 +1,13 @@
+{
+  "fs": {
+    "files": ["cartesiRollup.py",
+     "entrypoint.sh",
+     "GB_DAOgenerator/compileDAO.py",
+     "GB_DAOgenerator/interactDAO.py",
+      "GB_ERC20generator/compileERC20.py",
+      "GB_ERC20generator/interactERC20.py",
+      "GB_NFTgenerator/compileNFT.py",
+      "GB_NFTgenerator/interactNFT.py"
+    ]
+  }
+}
